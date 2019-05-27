@@ -16,34 +16,27 @@
 		checkvalue($string);
 
 	}
-	function show($array){
-		if($array==null){
-			echo "Không có số nguyên tố";
-		}
-		foreach ($array as $key ) {
-			$key= "Số nguyên tố là ".$key."<br>";
-			echo $key;
-		}
-		return $key;
+	function show($snt){
+		echo $snt." là số nguyên tố <br>";
 	}
-	function snt($a,$b){
-		$ar_snt=[];
+	function ktsnt($a){
 		$dem=0;
-		for($i=$a;$i<$b+1;$i++){
-			for ($i1=2;$i1<$i+1;$i1++){
-				if($i%$i1==0){
+			for ($i1=2;$i1<$a+1;$i1++){
+				if($a%$i1==0){
 					$dem++;
 				}
 
 			}
 			if($dem==1){
-				array_push($ar_snt, $i);
-			} 
-			
-			$dem=0;
+				show($a);
+				return $a;
+			} 	
+			return False;		
+	}
+	function send($a,$b){
+		for($i=$a;$i<$b+1;$i++){
+			ktsnt($i);
 		}
-		show($ar_snt);
-		return $ar_snt;
 	}
 	function checkvalue($str){
 		$find=strpos($str, '-');
@@ -53,9 +46,8 @@
 			echo '<script>alert("Giá trị nhập không hợp lệ");</script>';
 			return false;
 		}
-		snt($val_a,$val_b);
-		return "Giá trị a".$val_a." Giá trị b".$val_b;
-		
+		send($val_a,$val_b);
+		return "Giá trị a".$val_a." Giá trị b".$val_b;		
 	}
 	?>
 </body>
