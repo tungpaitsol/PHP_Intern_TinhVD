@@ -25,27 +25,23 @@
 		echo "Số vừa nhập a=".$a.", b=".$b.", c=".$c."<br>";
 		if($a==0){
 			$x=-$c/$b;
-			$result= "Phương trình có nghiệm: x=".$x;
-			//return $result;		
+			return "Phương trình có nghiệm: x=".$x;	
 		}
 		else{
 			$delta=$b*$b-4*$a*$c;
 			if($delta<0){
-				$result= "Phương trình vô nghiệm";
+				return "Phương trình vô nghiệm";
 			}
 			else if($delta==0){
 				$x=-$b/$a*2;
-				$result= "Phương trình có nghiệm kép: x=".$x;
-				//return $result;
+				return "Phương trình có nghiệm kép: x=".$x;
 			}
 			else{
 				$x1=(-$b+sqrt($delta))/($a*2);
 				$x2=(-$b-sqrt($delta))/($a*2);
-				$result= "Phương trình có 2 nghiệm phân biệt: x1=".$x1." và x2=".$x2;
-				//return $result;
+				return "Phương trình có 2 nghiệm phân biệt: x1=".$x1." và x2=".$x2;
 			}
 		}
-		return $result;
 	}
 	?>
 </body>
