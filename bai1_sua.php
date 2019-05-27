@@ -46,6 +46,7 @@
 			}
 		}
 		echo $result;
+		return $result;
 		}
 		
 	
