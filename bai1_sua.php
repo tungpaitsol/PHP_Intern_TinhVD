@@ -27,20 +27,18 @@
 			$x=-$c/$b;
 			return "Phương trình có nghiệm: x=".$x;	
 		}
+		$delta=$b*$b-4*$a*$c;
+		if($delta<0){
+			return "Phương trình vô nghiệm";
+		}
+		else if($delta==0){
+			$x=-$b/$a*2;
+			return "Phương trình có nghiệm kép: x=".$x;
+		}
 		else{
-			$delta=$b*$b-4*$a*$c;
-			if($delta<0){
-				return "Phương trình vô nghiệm";
-			}
-			else if($delta==0){
-				$x=-$b/$a*2;
-				return "Phương trình có nghiệm kép: x=".$x;
-			}
-			else{
-				$x1=(-$b+sqrt($delta))/($a*2);
-				$x2=(-$b-sqrt($delta))/($a*2);
-				return "Phương trình có 2 nghiệm phân biệt: x1=".$x1." và x2=".$x2;
-			}
+			$x1=(-$b+sqrt($delta))/($a*2);
+			$x2=(-$b-sqrt($delta))/($a*2);
+			return "Phương trình có 2 nghiệm phân biệt: x1=".$x1." và x2=".$x2;
 		}
 	}
 	?>
