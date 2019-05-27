@@ -19,11 +19,11 @@
 		$a=$_POST["valuea"];
 		$b=$_POST["valueb"];
 		$c=$_POST["valuec"];
-		giaiPtBac2($a,$b,$c);
-		}
-		function giaiPtBac2($a,$b,$c){
-			echo "Số vừa nhập a=".$a.", b=".$b.", c=".$c."<br>";
-			if($a==0){
+		echo giaiPtBac2($a,$b,$c);
+	}
+	function giaiPtBac2($a,$b,$c){
+		echo "Số vừa nhập a=".$a.", b=".$b.", c=".$c."<br>";
+		if($a==0){
 			$x=-$c/$b;
 			$result= "Phương trình có nghiệm: x=".$x;
 			//return $result;		
@@ -45,12 +45,8 @@
 				//return $result;
 			}
 		}
-		echo $result;
 		return $result;
-		}
-		
-	
-
+	}
 	?>
 </body>
 </html>
