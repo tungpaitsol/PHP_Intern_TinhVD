@@ -15,16 +15,16 @@
 		get_input($string);
 	}
 	function ktsnt($a){
-		$dem=0;
-			for ($i1=2;$i1<$a+1;$i1++){
-				if($a%$i1==0){
-					$dem++;
-				}
+		if ($a < 2) {
+			return false;
+		}
+		for($i = 2; $i <= sqrt ( $a ); $i ++) {
+			if ($a % $i == 0) {
+				return false;
 			}
-			if($dem==1){
-				return $a;
-			}
-			return false; 			
+		}
+		return $a;
+		
 	}
 	function send($a,$b){
 		$ar_snt=[];
@@ -40,8 +40,8 @@
 		}
 		else{
 			foreach ($ar_snt as $key ) {
-			echo $key."- la snt<br>";
-		}
+				echo $key."- la snt<br>";
+			}
 		}		
 	}
 	function get_input($str2){
