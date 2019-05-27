@@ -36,6 +36,9 @@
 		return $ar_snt;
 	}
 	function show($array){
+	if($array==null){
+			echo "Không có số nguyên tố";
+		}
 		foreach ($array as $key ) {
 			echo "Số nguyên tố là ".$key."<br>";
 			# code...
