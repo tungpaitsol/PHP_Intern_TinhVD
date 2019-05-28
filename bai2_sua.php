@@ -12,7 +12,7 @@
 	<?php
 	if(isset($_POST['submit'])){
 		$string=$_POST["put"];
-		get_input($string);
+		check_input($string);
 	}
 	function ktsnt($a){
 		if ($a < 2) {
@@ -23,43 +23,41 @@
 				return false;
 			}
 		}
-		return $a;
-		
+		return $a;		
 	}
-	function send($a,$b){
+	function xuat_snt($a,$b){
 		$ar_snt=[];
-		for($i=$a;$i<$b+1;$i++){
-			$a=ktsnt($i);
-			if($a!=""){
-				array_push($ar_snt,ktsnt($i));
+		for($i=$a;$i<=$b;$i++){
+			$c=ktsnt($i);
+			if($c!=""){
+				array_push($ar_snt,$i);
+			}
+		}
+		if($ar_snt==null){
+			echo "<br>$a - $b không có số nguyên tố";
+		}
+		else{
+			echo "<br>số nguyên tố trong khoảng $a - $b: ";
+			foreach ($ar_snt as $snt) {
+				echo $snt." ";
+			}
+		}
+	}
+	function check_input($str2){
+
+		$ar_value=explode(',', $str2);
+		foreach ($ar_value as $str ) {
+			$find=strpos($str, '-');
+			$val_a=substr($str,0,$find);
+			$val_b=substr($str,$find+1,strlen($str));
+			if($find==null || is_numeric($val_a)==false || is_numeric($val_b)==false){
+				echo "Giá trị nhập không hợp lệ";
+			}
+			else{
+				xuat_snt($val_a,$val_b);
 			}
 			
 		}
-		if($ar_snt==null){
-			echo "Không có số nguyên tố";
-		}
-		else{
-			foreach ($ar_snt as $key ) {
-				echo $key."- la snt<br>";
-			}
-		}		
-	}
-	function get_input($str2){
-		$ar_value=explode(',', $str2);
-		foreach ($ar_value as $key ) {
-			checkvalue($key);
-		}
-	}
-	function checkvalue($str){
-		$find=strpos($str, '-');
-		$val_a=substr($str,0,$find);
-		$val_b=substr($str,$find+1,strlen($str));
-		if($find==null || (int)$val_a<0 || (int)$val_b==0){
-			echo '<script>alert("Giá trị nhập không hợp lệ");</script>';
-			return false;
-		}
-		send($val_a,$val_b);
-		return "Giá trị a".$val_a." Giá trị b".$val_b;		
 	}
 	?>
 </body>
