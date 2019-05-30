@@ -31,15 +31,17 @@ else{
 		$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$input_length = strlen($chars);
 		$random_string="";
-			for($i = 0; $i < $strlength; $i++) {
-				$random_string .= $chars[mt_rand(0, $input_length - 1)];
-			}	
-			return $random_string;
+		for($i = 0; $i < $strlength; $i++) {
+			$random_string .= $chars[mt_rand(0, $input_length - 1)];
+		}	
+		return $random_string;
 	}
 	function randomInt($intlength){
+		$min=pow(10,$intlength-1);
 		$max=pow(10,$intlength)-1;
-		return mt_rand(1,$max);
+		return mt_rand($min,$max);
 	}
+	echo randomInt(3);
 	function khoiTaoMang($n){	
 		$array1=[];
 		for($i=0;$i<$n;$i++){
