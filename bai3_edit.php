@@ -27,37 +27,30 @@ else{
 		echo "<pre>";
 		print_r(khoiTaoMang($n)) ;
 	}
-	function random($input, $strlength) {
-		$input_length = strlen($input);
-		$random_string="";
-		$a=$input[mt_rand(0, $input_length - 1)];
-		if($a==0){
-			$a = $input[mt_rand(1, $input_length - 1)];
-			for($i = 0; $i < $strlength-1; $i++) {
-				$random_string .= $input[mt_rand(0, $input_length - 1)];
-			}
-			return $a.$random_string;
-		}
-		else{
-			for($i = 0; $i < $strlength-1; $i++) {
-				$random_string .= $input[mt_rand(0, $input_length - 1)];
-			}	
-			return $a.$random_string;
-		}
-	}
-	function khoiTaoMang($n){
+	function randomStr($strlength) {
 		$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$number="0123456789";
+		$input_length = strlen($chars);
+		$random_string="";
+			for($i = 0; $i < $strlength; $i++) {
+				$random_string .= $chars[mt_rand(0, $input_length - 1)];
+			}	
+			return $random_string;
+	}
+	function randomInt($intlength){
+		$max=pow(10,$intlength)-1;
+		return mt_rand(1,$max);
+	}
+	function khoiTaoMang($n){	
 		$array1=[];
 		for($i=0;$i<$n;$i++){
 			$type=mt_rand(1,2);
 			$length=mt_rand($n/4,(3*$n)/4);
 			if($type==1){
-				$a=random($number,$length);
+				$a=randomInt($length);
 				array_push($array1,$a);
 			}
 			else{
-				$b=random($chars,$length);
+				$b=randomStr($length);
 				array_push($array1,$b);
 			}				
 		}
@@ -79,11 +72,7 @@ else{
 				array_push($arrayStr,$key);
 			}
 		}
-		//echo "Mảng string là";
-		//echo "<pre>";
 		print_r($arrayStr);
-		//echo "Mảng INT là";
-		//echo "<pre>";
 		print_r($arrayInt);
 	}
 	?>
