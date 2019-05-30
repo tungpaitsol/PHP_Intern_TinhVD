@@ -36,15 +36,14 @@ else{
 			for($i = 0; $i < $strlength-1; $i++) {
 				$random_string .= $input[mt_rand(0, $input_length - 1)];
 			}
-			$random_string=$a.$random_string;
+			return $a.$random_string;
 		}
 		else{
 			for($i = 0; $i < $strlength-1; $i++) {
 				$random_string .= $input[mt_rand(0, $input_length - 1)];
 			}	
-			$random_string=$a.$random_string;
+			return $a.$random_string;
 		}
-		return $random_string;
 	}
 	function khoiTaoMang($n){
 		$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
