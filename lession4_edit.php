@@ -90,7 +90,7 @@ function sortA_Z($data,$field){
 	$p_min=0;
 	$count=count($data);
 	for($i = 0; $i < $count; $i++) {
-		for($j = $i+1; $j < $count; $j++) {
+		for($j = $i+1; $j < $count-1; $j++) {
 			if($data[$j][$field] < $data[$i][$field]) {
 				$p_min = $data[$j];
 				$data[$j] = $data[$i];
@@ -106,7 +106,7 @@ function sortZ_A($data,$field){
 	$p_max=0;
 	$count=count($data);
 	for($i = 0; $i < $count; $i++) {
-		for($j = $i+1; $j < $count; $j++) {
+		for($j = $i+1; $j < $count-1; $j++) {
 			if($data[$j][$field] > $data[$i][$field]) {
 				$p_max = $data[$j];
 				$data[$j] = $data[$i];
