@@ -68,7 +68,8 @@
 		echo show(sortSumZ_A($data));
 	}
 //==============function show
-	function show($array_sort){
+//==============function show
+	function show1($array_sort){
 		$a= '	<table>
 		<tr>
 		<th>ID</th>
@@ -91,6 +92,36 @@
 		$a.= '</table>';
 		return $a;
 	}
+	function show($array_sort){
+		$a= '';
+		foreach ($array_sort as $key) { 
+			$sum=$key["price"]*$key["quantity"];
+			$a.= <<<EDO
+			<tr>
+			<td>{$key['id']}</td>
+			<td>{$key['name']}</td>
+			<td>{$key['price']}</td>
+			<td>{$key['quantity']}</td>
+			<td>{$key['order']}</td>
+			<td>{$sum}</td>
+			</tr>
+EDO;
+		}
+		return <<<EDO
+			<table>
+		<tr>
+		<th>ID</th>
+		<th>NAME</th>
+		<th>PRICE</th>
+		<th>QUANTITY</th>
+		<th>ORDER</th>
+		<th>SUM</th>
+		</tr>
+		$a
+		</table>
+EDO;
+	}
+
 //=============sap xem tong
 	function sortSumA_Z($data){
 		$p_min=0;
@@ -159,7 +190,5 @@
 		return $data;
 	}
 	?>
-</div>
-</div>
 </body>
 </html>
