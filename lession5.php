@@ -90,8 +90,8 @@ session_start();
 	}
 	function sort_id($data){
 		$min=0;
-		for($i=0;$i<9;$i++){
-			for($j=$i+1;$j<10;$j++){
+		for($i=0;$i<count($data)-1;$i++){
+			for($j=$i+1;$j<count($data);$j++){
 				if($data[$j]["order"]==$data[$i]["order"]){
 					if($data[$j]["id"]<$data[$i]["id"]){
 						$min=$data[$j];
