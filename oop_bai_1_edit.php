@@ -128,6 +128,19 @@ foreach ($listMemberPartTime as $employee) {
 /*-------------------------------------*/
 class General
 {
+	const holidays = 
+	[
+		"2019-01-01",
+		"2019-02-04",
+		"2019-02-05",
+		"2019-02-06",
+		"2019-02-07",
+		"2019-02-08",
+		"2019-04-14",
+		"2019-04-30",
+		"2019-05-01",
+		"2019-09-02"
+	];
 	function dateInMonth($year,$month)
 	{
 		return cal_days_in_month(CAL_GREGORIAN, $month, $year);
@@ -147,24 +160,11 @@ class General
 		$dateNow = getdate(strtotime($date));
 		$y = $dateNow["year"];
 		$m = $dateNow["mon"];
-		$holidays = 
-		[
-			"2019-01-01",
-			"2019-02-04",
-			"2019-02-05",
-			"2019-02-06",
-			"2019-02-07",
-			"2019-02-08",
-			"2019-04-14",
-			"2019-04-30",
-			"2019-05-01",
-			"2019-09-02"
-		];
 		$holiday = 0;
 		$daysInMonth = $this->dateInMonth($y, $m);
 		for ($i = 1; $i <= $daysInMonth; $i++) {
 			$dayNow= sprintf("%s-%02d-%02d", $y, $m, $i);
-			if ($this->isWeekend($dayNow) || in_array($dayNow, $holidays)) {
+			if ($this->isWeekend($dayNow) || in_array($dayNow, General::holidays)) {
 				$holiday++;
 			}
 		}
