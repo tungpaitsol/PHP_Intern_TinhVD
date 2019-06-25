@@ -2,115 +2,120 @@
 $file = include("./data.php");
 class Employee
 {
-	private $code;
-	private $full_name;
-	private $age;
-	private $gender;
-	private $marital_status;
-	private $total_work_time;
-	private $salary;
-	private $workdays;
-	private $start_work_time;
-	private $work_hour;
-	private $has_lunch_break;
-	public function __construct($_code, $_full_name, $_age, $_gender, $_marital_status, $_total_work_time, $_salary,$_start_work_time, $_work_hour, $_has_lunch_break, $_workdays=0)
+	private $_code;
+	private $_fullName;
+	private $_age;
+	private $_gender;
+	private $_maritalStatus;
+	private $_totalWorkTime;
+	private $_salary;
+	private $_workDays;
+	private $_startWorkTime;
+	private $_workHour;
+	private $_hasLunchBreak;
+	public function __construct($code, $fullName, $age, $gender, $maritalStatus, $totalWorkTime,
+		$salary,$startWorkTime, $workHour, $hasLunchBreak, $workDays=0)
 	{
-		$this->code = $_code;
-		$this->full_name = $_full_name;
-		$this->age = $_age;
-		$this->gender = $_gender;
-		$this->marital_status = $_marital_status;
-		$this->total_work_time = $_total_work_time;
-		$this->salary = $_salary;
-		$this->start_work_time = $_start_work_time;
-		$this->workdays = $_workdays;
-		$this->work_hour = $_work_hour;
-		$this->has_lunch_break = $_has_lunch_break;
+		$this->_code = $code;
+		$this->_fullName = $fullName;
+		$this->_age = $age;
+		$this->_gender = $gender;
+		$this->_maritalStatus = $maritalStatus;
+		$this->_totalWorkTime = $totalWorkTime;
+		$this->_salary = $salary;
+		$this->_startWorkTime = $startWorkTime;
+		$this->_workDays = $workDays;
+		$this->_workHour = $workHour;
+		$this->_hasLunchBreak = $hasLunchBreak;
 	}
 	public function getCode()
 	{
-		return $this->code;
+		return $this->_code;
 	}
 	public function getFullName()
 	{
-		return $this->full_name;
+		return $this->_fullName;
 	}
 	public function getAge()
 	{
-		return $this->age;
+		return $this->_age;
 	}
 	public function getGender()
 	{
-		return $this->gender;
+		return $this->_gender;
 	}
 	public function getMaritalStatus()
 	{
-		return $this->marital_status;
+		return $this->_maritalStatus;
 	}
 	public function getTotalWorkTime()
 	{
-		return $this->total_work_time;
+		return $this->_totalWorkTime;
 	}
 	public function setSalary($salary)
 	{
-		$this->salary=$salary;
+		$this->_salary=$salary;
 	}
 	public function getSalary()
 	{
-		return $this->salary;
+		return $this->_salary;
 	}
 	public function getStartWorkTime()
 	{
-		return $this->start_work_time;
+		return $this->_startWorkTime;
 	}
 	public function setWorkdays($wd)
 	{
-		$this->workdays=$wd;
+		$this->_workDays=$wd;
 	}
 	public function getWorkdays()
 	{
-		return $this->workdays;
+		return $this->_workDays;
 	}
 	public function getWorkhour()
 	{
-		return $this->work_hour;
+		return $this->_workHour;
 	}
 	public function getHasLunchBreak()
 	{
-		return $this->has_lunch_break;
+		return $this->_hasLunchBreak;
 	}
 }
 //============
 class WorkTime{
-	private $member_code;
-	private $start_datetime;
-	private $end_datetime;
-	function __construct($_member_code,$_start_datetime,$_end_datetime){
-		$this->member_code=$_member_code;
-		$this->start_datetime=$_start_datetime;
-		$this->end_datetime=$_end_datetime;
+	private $_memberCode;
+	private $_startDatetime;
+	private $_endDatetime;
+	function __construct($memberCode,$startDatetime,$endDatetime){
+		$this->_memberCode=$memberCode;
+		$this->_startDatetime=$startDatetime;
+		$this->_endDatetime=$endDatetime;
 	}
 	function getMemberCode(){
-		return $this->member_code;
+		return $this->_memberCode;
 	}
 	function getStartTime(){
-		return $this->start_datetime;
+		return $this->_startDatetime;
 	}
 	function getEndTime(){
-		return $this->end_datetime;
+		return $this->_endDatetime;
 	}
 }
 $arrayWorkTime=[];
-foreach ($listWorkTime as $key) {
-	array_push($arrayWorkTime, new WorkTime($key["member_code"],$key["start_datetime"],$key["end_datetime"]));
+foreach ($listWorkTime as $member) {
+	array_push($arrayWorkTime, new WorkTime($member["member_code"],$member["start_datetime"],$member["end_datetime"]));
 }
 $employeeFullTime=[];
-foreach ($listMemberFullTime as $key) {
-	array_push($employeeFullTime, new Employee($key["code"],$key["full_name"],$key["age"],$key["gender"],$key["marital_status"],$key["total_work_time"],$key["salary"],$key["start_work_time"],$key["work_hour"],$key["has_lunch_break"]));
+foreach ($listMemberFullTime as $employee) {
+	array_push($employeeFullTime, new Employee($employee["code"],$employee["full_name"],$employee["age"],
+		$employee["gender"],$employee["marital_status"],$employee["total_work_time"],$employee["salary"],
+		$employee["start_work_time"],$employee["work_hour"],$employee["has_lunch_break"]));
 }
 $employeePartTime=[];
-foreach ($listMemberPartTime as $key) {
-	array_push($employeePartTime, new Employee($key["code"],$key["full_name"],$key["age"],$key["gender"],$key["marital_status"],$key["total_work_time"],$key["salary"],$key["start_work_time"],$key["work_hour"],$key["has_lunch_break"]));
+foreach ($listMemberPartTime as $employee) {
+	array_push($employeePartTime, new Employee($employee["code"],$employee["full_name"],$employee["age"],
+		$employee["gender"],$employee["marital_status"],$employee["total_work_time"],$employee["salary"],
+		$employee["start_work_time"],$employee["work_hour"],$employee["has_lunch_break"]));
 }
 /*-------------------------------------*/
 class General
@@ -120,20 +125,20 @@ class General
 		return cal_days_in_month(CAL_GREGORIAN, $month, $year);
 	}
 //========ham tra lai ngay nghi
-	function third($date)
-    { // chen vao thoi gian "y:m:d"
-    $arDate = getdate(strtotime($date));
-    if ($arDate["weekday"] == "Sunday" || $arDate["weekday"] == "Saturday") {
-    	return true;
-    }
-    return false;
-}
+	function weekDay($date)
+	{
+		$dayNow = getdate(strtotime($date));
+		if ($dayNow["weekday"] == "Sunday" || $dayNow["weekday"] == "Saturday") {
+			return true;
+		}
+		return false;
+	}
 //==========ham tinh so ngay
-function dayWorkInMonth($date) 
-    { // chen vao thoi gian "y-m-d" or "y-m" "y-m-d h-i-s"
-    $arDate = getdate(strtotime($date));
-    $y = $arDate["year"];
-    $m = $arDate["mon"];
+	function dayWorkInMonth($date) 
+    {
+    $dateNow = getdate(strtotime($date));
+    $y = $dateNow["year"];
+    $m = $dateNow["mon"];
     $holidays = 
     [
     	"2019-01-01",
@@ -150,8 +155,8 @@ function dayWorkInMonth($date)
     $holiday = 0;
     $d = $this->dateInMonth($y, $m);
     for ($i = 1; $i <= $d; $i++) {
-    	$dayNow= date("Y-m-d",strtotime("$date-$i"));
-    	if ($this->third($dayNow) || in_array($dayNow, $holidays)) {
+    	$dayNow= sprintf("%s-%02d-%02d", $y, $m, $i);
+    	if ($this->weekDay($dayNow) || in_array($dayNow, $holidays)) {
     		$holiday++;
     	}
     }
@@ -159,97 +164,94 @@ function dayWorkInMonth($date)
 }
 //===============
 function getTime($data)
-    { // lay ra gio : phut : giay cua ngay neu ngay do truyen vao co ca ngay, thang nam
-        //
-    	return date('H:i:s', strtotime($data));
-    }
-    function hourWorkDay($startTimeDay, $endTimeDay)
-    { 
-    	$startTimeDay= $this->getTime($startTimeDay);
-    	$endTimeDay = $this->getTime($endTimeDay);
-    	return (strtotime($endTimeDay) - strtotime($startTimeDay))/3600;
-    }
-    function listWorkTimeF($listWorkTime, $listMemberFullTime, $dataDate)
-    {
-    	$arDate = getdate(strtotime($dataDate));
-    	$m = $arDate["mon"];
-    	foreach ($listMemberFullTime as $key ) {
-    		$day = 0;
-    		foreach ($listWorkTime as $item) {
-    			$mo=getdate(strtotime($item->getStartTime()));
-    			$mo=$mo["mon"];
-    			$time=0;
-    			if($key->getCode()==$item->getMemberCode()&&$mo==$m){                  
-    				$startWorkTime = $key->getStartWorkTime();
-    				$inTime = $this->getTime($item->getStartTime()); 
-    				$outTime = $this->getTime($item->getEndTime());
-    				if (strtotime($startWorkTime) - strtotime($inTime) < 0) {
-    					$time = $this->hourWorkDay($inTime, $outTime) - 1.5;
+{
+	return date('H:i:s', strtotime($data));
+}
+function hourWorkDay($startTimeDay, $endTimeDay)
+{ 
+	$startTimeDay= $this->getTime($startTimeDay);
+	$endTimeDay = $this->getTime($endTimeDay);
+	return (strtotime($endTimeDay) - strtotime($startTimeDay))/3600;
+}
+function dayMemberFullTime($listWorkTime, $listMemberFullTime, $dataDate)
+{
+	$arDate = getdate(strtotime($dataDate));
+	$monthNeedCal = $arDate["mon"];
+	foreach ($listMemberFullTime as $employee ) {
+		$dayWork = 0;
+		foreach ($listWorkTime as $workTimeDayEmployee) {
+			$monthNow=getdate(strtotime($workTimeDayEmployee->getStartTime()));
+			$monthNow=$monthNow["mon"];
+			$timeWorkDay=0;
+			if($employee->getCode()==$workTimeDayEmployee->getMemberCode()&&$monthNow==$monthNeedCal){                  
+				$startWorkTime = $employee->getStartWorkTime();
+				$inTime = $this->getTime($workTimeDayEmployee->getStartTime()); 
+				$outTime = $this->getTime($workTimeDayEmployee->getEndTime());
+				if (strtotime($startWorkTime) - strtotime($inTime) < 0) {
+					$timeWorkDay = $this->hourWorkDay($inTime, $outTime) - 1.5;
                     } else { // di som
-                    	$time = $this->hourWorkDay($startWorkTime, $outTime) - 1.5;
+                    	$timeWorkDay = $this->hourWorkDay($startWorkTime, $outTime) - 1.5;
                     }
-                    if ($time >= $key->getWorkhour()) {
-                    	$day += 1;
+                    if ($timeWorkDay >= $employee->getWorkhour()) {
+                    	$dayWork += 1;
                     } 
-                    elseif ($time >= 4 || $time<$key->getWorkhour()) {
-                    	$day += 0.5;
+                    elseif ($timeWorkDay >= 4 || $timeWorkDay<$employee->getWorkhour()) {
+                    	$dayWork += 0.5;
                     }
 
                 }
             }
-            $key->setWorkdays($day);
+            $employee->setWorkdays($dayWork);
         }
 
 
     }
 
 //=============================================
-    function listWorkTimeP($listWorkTime, $listMemberFullTime, $dataDate)
+    function dayMemberPartTime($listWorkTime, $listMemberPartTime, $dataDate)
     {
     	$arDate = getdate(strtotime($dataDate));
-    	$m = $arDate["mon"];
-    	foreach ($listMemberFullTime as $key ) {
-    		$day = 0;
-    		foreach ($listWorkTime as $item) {
-    			$mo=getdate(strtotime($item->getStartTime()));
-    			$mo=$mo["mon"];
-    			$time=0;
-    			if($key->getCode()==$item->getMemberCode()&&$mo==$m){                  
-    				$startWorkTime = $key->getStartWorkTime();
-    				$inTime = $this->getTime($item->getStartTime()); 
-    				$outTime = $this->getTime($item->getEndTime());
+    	$monthNeedCal = $arDate["mon"];
+    	foreach ($listMemberPartTime as $employee ) {
+    		$dayWork = 0;
+    		foreach ($listWorkTime as $workTimeDayEmployee) {
+    			$monthNow=getdate(strtotime($workTimeDayEmployee->getStartTime()));
+    			$monthNow=$monthNow["mon"];
+    			$timeWorkDay=0;
+    			if($employee->getCode()==$workTimeDayEmployee->getMemberCode()&&$monthNow==$monthNeedCal){                  
+    				$startWorkTime = $employee->getStartWorkTime();
+    				$inTime = $this->getTime($workTimeDayEmployee->getStartTime()); 
+    				$outTime = $this->getTime($workTimeDayEmployee->getEndTime());
                     if (strtotime($startWorkTime) - strtotime($inTime) < 0) { //di muon
-                    	$time = $this->hourWorkDay($inTime, $outTime);
+                    	$timeWorkDay = $this->hourWorkDay($inTime, $outTime);
                     } else { // di som
-                    	$time = $this->hourWorkDay($startWorkTime, $outTime);
+                    	$timeWorkDay= $this->hourWorkDay($startWorkTime, $outTime);
                     }
-                    if ($time >= $key->getWorkhour()) {
-                    	$day += 0.5;
+                    if ($timeWorkDay >= $employee->getWorkhour()) {
+                    	$dayWork += 0.5;
                     }
                 }
             }
-            $key->setWorkdays($day);
+            $employee->setWorkdays($dayWork);
         }
     }
 //===============
-    function moneyInMonthF($employees, $date)
+    function moneyInMonth($employees, $date)
     {
-    	foreach ($employees as $key ) {
-    		$salary=$key->getSalary();
-    		$workdays=$key->getWorkdays();
+    	foreach ($employees as $member ) {
+    		$salary=$member->getSalary();
+    		$workdays=$member->getWorkdays();
     		$salary = $workdays * ($salary / $this->dayWorkInMonth($date));
-    		$key->setSalary($salary);
+    		$member->setSalary($salary);
     	}
     }
 }
 /*-------------------------------------*/
 $gender= new General;
-//echo $gender->dayWorkInMonth("2019-04");
-
-$gender->listWorkTimeF($arrayWorkTime, $employeeFullTime, "2019-04");
-$gender->listWorkTimeP($arrayWorkTime, $employeePartTime, "2019-04");
-$gender->moneyInMonthF($employeeFullTime, "2019-04");
-$gender->moneyInMonthF($employeePartTime, "2019-04");
+$gender->dayMemberFullTime($arrayWorkTime, $employeeFullTime, "2019-04");
+$gender->dayMemberPartTime($arrayWorkTime, $employeePartTime, "2019-04");
+$gender->moneyInMonth($employeeFullTime, "2019-04");
+$gender->moneyInMonth($employeePartTime, "2019-04");
 print_r($employeeFullTime);
 print_r($employeePartTime);
 ?>
