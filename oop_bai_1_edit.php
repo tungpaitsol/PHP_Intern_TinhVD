@@ -197,42 +197,34 @@ class General
 					$outTime = $this->getTime($workTime->getEndTime());
 					$lunchBreak=$employee->getHasLunchBreak();
 					if($lunchBreak){
-						if (strtotime($startWorkTime) - strtotime($inTime) < 0) {
-							$timeWorkDay = $this->getHourWorkDay($inTime, $outTime) - 1.5;
-                    } else { // di som
-                    	$timeWorkDay = $this->getHourWorkDay($startWorkTime, $outTime) - 1.5;
-                    }
-                    if ($timeWorkDay >= $employee->getWorkhour()) {
-                    	$dayWork += 1;
-                    } 
-                    elseif ($timeWorkDay >= 4 || $timeWorkDay<$employee->getWorkhour()) {
-                    	$dayWork += 0.5;
-                    }
-                } else{
-						 if (strtotime($startWorkTime) - strtotime($inTime) < 0) { //di muon
-						 	$timeWorkDay = $this->getHourWorkDay($inTime, $outTime);
-                    } else { // di som
-                    	$timeWorkDay= $this->getHourWorkDay($startWorkTime, $outTime);
-                    }
-                    if ($timeWorkDay >= $employee->getWorkhour()) {
-                    	$dayWork += 0.5;
-                    }
-                }
-            }
-        }
-        $employee->setWorkdays($dayWork);
-    }
-}
-//===============
-function moneyInMonth($employees, $date)
-{
-	foreach ($employees as $member ) {
-		$salary=$member->getSalary();
-		$workdays=$member->getWorkdays();
-		$salaryActual = $workdays * ($salary / $this->dayWorkInMonth($date));
-		$member->setSalaryActual($salaryActual);
+						$timeWorkDay = $this->getHourWorkDay($startWorkTime, $outTime) - 1.5;
+						if(strtotime($startWorkTime) - strtotime($inTime) >= 0 && $timeWorkDay>=$employee->getWorkhour()){
+							$dayWork+=1;
+						}
+						else{
+							$dayWork+=0.5;
+						}
+					} else{
+						$timeWorkDay = $this->getHourWorkDay($startWorkTime, $outTime);
+						if(strtotime($startWorkTime) - strtotime($inTime) >= 0 && $timeWorkDay>=$employee->getWorkhour()){
+							$dayWork+=0.5;
+						}
+					}
+				}
+			}
+			$employee->setWorkdays($dayWork);
+		}
 	}
-}
+//===============
+	function moneyInMonth($employees, $date)
+	{
+		foreach ($employees as $member ) {
+			$salary=$member->getSalary();
+			$workdays=$member->getWorkdays();
+			$salaryActual = $workdays * ($salary / $this->dayWorkInMonth($date));
+			$member->setSalaryActual($salaryActual);
+		}
+	}
 }
 /*-------------------------------------*/
 $gender= new General;
