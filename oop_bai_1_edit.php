@@ -14,8 +14,9 @@ class Employee
 	private $_workHour;
 	private $_hasLunchBreak;
 	private $_salaryActual;
+	private $_member;
 	public function __construct($code, $fullName, $age, $gender, $maritalStatus, $totalWorkTime,
-		$salary,$startWorkTime, $workHour, $hasLunchBreak, $workDays=0,$salaryActual=0)
+		$salary,$startWorkTime, $workHour, $hasLunchBreak,$member, $workDays=0,$salaryActual=0)
 	{
 		$this->_code = $code;
 		$this->_fullName = $fullName;
@@ -29,6 +30,7 @@ class Employee
 		$this->_workHour = $workHour;
 		$this->_hasLunchBreak = $hasLunchBreak;
 		$this->_salaryActual=$salaryActual;
+		$this->_member=$member;
 	}
 	public function getCode()
 	{
@@ -88,6 +90,9 @@ class Employee
 	public function getSalaryActual($salaryActual){
 		return $this->_salaryActual;
 	}
+	public function getMember($member){
+		return $this->_member;
+	}
 }
 //============
 class WorkTime{
@@ -117,18 +122,18 @@ $employeeFullTime=[];
 foreach ($listMemberFullTime as $employee) {
 	array_push($employeeFullTime, new Employee($employee["code"],$employee["full_name"],$employee["age"],
 		$employee["gender"],$employee["marital_status"],$employee["total_work_time"],$employee["salary"],
-		$employee["start_work_time"],$employee["work_hour"],$employee["has_lunch_break"]));
+		$employee["start_work_time"],$employee["work_hour"],$employee["has_lunch_break"],"1"));
 }
 $employeePartTime=[];
 foreach ($listMemberPartTime as $employee) {
 	array_push($employeePartTime, new Employee($employee["code"],$employee["full_name"],$employee["age"],
 		$employee["gender"],$employee["marital_status"],$employee["total_work_time"],$employee["salary"],
-		$employee["start_work_time"],$employee["work_hour"],$employee["has_lunch_break"]));
+		$employee["start_work_time"],$employee["work_hour"],$employee["has_lunch_break"],"0"));
 }
 /*-------------------------------------*/
 class General
 {
-	const holidays = 
+	const HOLIDAYS = 
 	[
 		"2019-01-01",
 		"2019-02-04",
@@ -164,7 +169,7 @@ class General
 		$daysInMonth = $this->dateInMonth($y, $m);
 		for ($i = 1; $i <= $daysInMonth; $i++) {
 			$dayNow= sprintf("%s-%02d-%02d", $y, $m, $i);
-			if ($this->isWeekend($dayNow) || in_array($dayNow, General::holidays)) {
+			if ($this->isWeekend($dayNow) || in_array($dayNow, General::HOLIDAYS)) {
 				$holiday++;
 			}
 		}
@@ -181,35 +186,37 @@ class General
 		$endTimeDay = $this->getTime($endTimeDay);
 		return (strtotime($endTimeDay) - strtotime($startTimeDay))/3600;
 	}
-	function dayWorkMember($listWorkTime, $listMemberFullTime, $dataDate)
+	function dayWorkMember($listWorkTime, $listMember, $dataDate)
 	{
 		$arDate = getdate(strtotime($dataDate));
 		$monthNeedCal = $arDate["mon"];
-		foreach ($listMemberFullTime as $employee ) {
+		foreach ($listMember as $employee ) {
+			$lunchBreak=$employee->getHasLunchBreak();
+
+			if($lunchBreak == 1){
+					$timeHasLunchBreak=1.5;
+				} else {
+					$timeHasLunchBreak=0;
+				}
+
 			$dayWork = 0;
+			
 			foreach ($listWorkTime as $workTime) {
 				$monthNow=getdate(strtotime($workTime->getStartTime()));
 				$monthNow=$monthNow["mon"];
 				$timeWorkDay=0;
-				if($employee->getCode()===$workTime->getMemberCode()&&$monthNow==$monthNeedCal){
-					$startWorkTime = $employee->getStartWorkTime();
-					$inTime = $this->getTime($workTime->getStartTime()); 
-					$outTime = $this->getTime($workTime->getEndTime());
-					$lunchBreak=$employee->getHasLunchBreak();
-					if($lunchBreak){
-						$timeWorkDay = $this->getHourWorkDay($startWorkTime, $outTime) - 1.5;
-						if(strtotime($startWorkTime) - strtotime($inTime) >= 0 && $timeWorkDay>=$employee->getWorkhour()){
-							$dayWork+=1;
-						}
-						else{
-							$dayWork+=0.5;
-						}
-					} else{
-						$timeWorkDay = $this->getHourWorkDay($startWorkTime, $outTime);
-						if(strtotime($startWorkTime) - strtotime($inTime) >= 0 && $timeWorkDay>=$employee->getWorkhour()){
-							$dayWork+=0.5;
-						}
-					}
+				$startWorkTime = $employee->getStartWorkTime();
+				$inTime = $this->getTime($workTime->getStartTime()); 
+				$outTime = $this->getTime($workTime->getEndTime());
+				
+				if($employee->getCode()!==$workTime->getMemberCode()||$monthNow!=$monthNeedCal) continue;
+
+				$timeWorkDay = $this->getHourWorkDay($startWorkTime, $outTime) - $timeHasLunchBreak;
+				if(strtotime($startWorkTime) - strtotime($inTime) >= 0 && $timeWorkDay>=$employee->getWorkhour()) {
+					$dayWork+=1;
+				}
+				else {
+					$dayWork+=0.5;
 				}
 			}
 			$employee->setWorkdays($dayWork);
@@ -218,11 +225,11 @@ class General
 //===============
 	function moneyInMonth($employees, $date)
 	{
-		foreach ($employees as $member ) {
-			$salary=$member->getSalary();
-			$workdays=$member->getWorkdays();
+		foreach ($employees as $employee ) {
+			$salary=$employee->getSalary();
+			$workdays=$employee->getWorkdays();
 			$salaryActual = $workdays * ($salary / $this->dayWorkInMonth($date));
-			$member->setSalaryActual($salaryActual);
+			$employee->setSalaryActual($salaryActual);
 		}
 	}
 }
