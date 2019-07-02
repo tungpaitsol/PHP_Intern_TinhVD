@@ -27,9 +27,9 @@ foreach (TextLang::getLanguage("lang") as $key => $value) {
   array_push($arrayLangs, new Language($key, $value));
 }
 foreach ($arrayLangs as  $value) {
-  $key1=$value->getCode();
-  $key2=$value->getValueCode();
-  echo "<a href='./index1.php?lang=$key1'><button>$key2</button></a>";
+  $code=$value->getCode();
+  $valueCode=$value->getValueCode();
+  echo "<a href='./index1.php?lang=$code'><button>$valueCode</button></a>";
 }
 class TextLang{
   private static $arrayLang;
@@ -73,8 +73,6 @@ class Locale
     return self::$_value=$fields;
   }
 }
-
-//$_SESSION["language"]="en";
 $z= Locale::getLanguage("title");
 echo "<pre>";
 echo $z;
