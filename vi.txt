@@ -1,0 +1,4 @@
+title="Đăng nhập"
+account="Số di động hoặc email"
+pass="Mật khẩu"
+rm="Ghi nhớ đăng nhập"

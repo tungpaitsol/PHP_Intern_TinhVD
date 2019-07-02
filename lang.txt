@@ -1,0 +1,2 @@
+vi="Tiếng việt"
+en="English"
