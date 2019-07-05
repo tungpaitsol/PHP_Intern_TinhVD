@@ -22,7 +22,7 @@ else{
   $_SESSION["language"]=$_GET["lang"];
 }
 $arrayLangs=[];
-foreach (TextLang::getLanguage("lang") as $key => $value) {
+foreach (TextLang::getLanguageText("lang") as $key => $value) {
   array_push($arrayLangs, new Language($key, $value));
 }
 foreach ($arrayLangs as  $value) {
@@ -32,7 +32,7 @@ foreach ($arrayLangs as  $value) {
 }
 class TextLang{
   private static $arrayLang;
-  function getLanguage($data){
+  function getLanguageText($data){
     $keys=[];
     $values=[];
     $arrayLang=[];
@@ -52,25 +52,22 @@ class TextLang{
 }
 class Locale
 {
-  private static $_value;
-  private static $_typeLang;
-  private $data;
+  //private static $languages;
+  private static $currentLanguage;
   function getLanguage($fields,$typeLang="en"){
-    if(isset($_SESSION["language"])){
-      Locale::$_typeLang=$_SESSION["language"];
+    if(isset($_GET["lang"])){
+      self::$currentLanguage=$_GET["lang"];
     }
     else{
-      Locale::$_typeLang=$typeLang;
+      self::$currentLanguage=$typeLang;
     }
-    $listLang=TextLang::getLanguage(self::$_typeLang);
+    $listLang=TextLang::getLanguageText(self::$currentLanguage);
     if(isset($listLang[$fields])){
-      return self::$_value=$listLang[$fields];
-      
+      return $listLang[$fields];      
     }
-    return self::$_value=$fields;
+    return $fields;
   }
 }
-//$z= Locale::getLanguage("title");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,10 +83,10 @@ class Locale
 
 <div class="container">
   <h2>OOP bài 2</h2>
-  <form action="/action_page.php">
+  <form >
     <div class="form-group">
       <label for="email">Email:</label>
-      <input type="email" class="form-control" id="email" placeholder="<?php echo Locale::getLanguage("account");?>" name="email">
+      <input type="email" class="form-control" id="email" placeholder="<?php echo Locale::getLanguage("account","vi");?>" name="email">
     </div>
     <div class="form-group">
       <label for="pwd">Password:</label>
