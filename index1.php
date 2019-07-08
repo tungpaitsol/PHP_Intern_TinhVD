@@ -1,5 +1,10 @@
 <?php
 session_start();
+/*--------------------------------------------*/
+if(isset($_GET["lang"])){
+  $_SESSION["language"]=$_GET["lang"];
+}
+/*--------------------------------------------*/
 class Language
 {
   private $_code;
@@ -15,12 +20,6 @@ class Language
     return $this->_valueCode;
   }
 }
-if(!isset($_GET["lang"])){
-  $_SESSION["language"]="en";
-}
-else{
-  $_SESSION["language"]=$_GET["lang"];
-}
 $arrayLangs=[];
 foreach (TextLang::getLanguageText("lang") as $key => $value) {
   array_push($arrayLangs, new Language($key, $value));
@@ -28,14 +27,12 @@ foreach (TextLang::getLanguageText("lang") as $key => $value) {
 foreach ($arrayLangs as  $value) {
   $code=$value->getCode();
   $valueCode=$value->getValueCode();
-  echo "<a href='./check.php?lang=$code'><button>$valueCode</button></a>";
+  echo "<a href='./check.php?lang=$code'>$valueCode</a>";
 }
 class TextLang{
-  private static $arrayLang;
   function getLanguageText($data){
     $keys=[];
     $values=[];
-    $arrayLang=[];
     $myfile = fopen($data.".txt", "r");
     while(!feof($myfile)) {
       $readLine= fgets($myfile);
@@ -47,23 +44,18 @@ class TextLang{
       array_push($values, $value);
     }
     fclose($myfile);
-    return  self::$arrayLang= array_combine($keys, $values);
+    return  array_combine($keys, $values);
   }
 }
 class Locale
 {
-  //private static $languages;
-  private static $currentLanguage;
-  function getLanguage($fields,$typeLang="en"){
-    if(isset($_GET["lang"])){
-      self::$currentLanguage=$_GET["lang"];
+  public static function  getLanguage($fields,$language="en"){
+    if(isset($_SESSION["language"])){
+      $language=$_SESSION["language"];
     }
-    else{
-      self::$currentLanguage=$typeLang;
-    }
-    $listLang=TextLang::getLanguageText(self::$currentLanguage);
-    if(isset($listLang[$fields])){
-      return $listLang[$fields];      
+    $listLanguage=TextLang::getLanguageText($language);
+    if(isset($listLanguage[$fields])){
+      return $listLanguage[$fields];
     }
     return $fields;
   }
@@ -80,24 +72,22 @@ class Locale
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-<div class="container">
-  <h2>OOP bài 2</h2>
-  <form >
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" class="form-control" id="email" placeholder="<?php echo Locale::getLanguage("account","vi");?>" name="email">
-    </div>
-    <div class="form-group">
-      <label for="pwd">Password:</label>
-      <input type="password" class="form-control" id="pwd" placeholder="<?php echo Locale::getLanguage("pass");?>" name="pwd">
-    </div>
-    <div class="checkbox">
-      <label><input type="checkbox" name="remember"><?php echo Locale::getLanguage("rm");?></label>
-    </div>
-    <button type="submit" class="btn btn-default"><?php echo Locale::getLanguage("title");?></button>
-  </form>
-</div>
-
+  <div class="container">
+    <h2>OOP bài 2</h2>
+    <form action="">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" placeholder="<?php echo Locale::getLanguage("account");?>" name="email">
+      </div>
+      <div class="form-group">
+        <label for="pwd">Password:</label>
+        <input type="password" class="form-control" id="pwd" placeholder="<?php echo Locale::getLanguage("pass");?>" name="pwd">
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox" name="remember"><?php echo Locale::getLanguage("rm");?></label>
+      </div>
+      <button type="submit" class="btn btn-default"><?php echo Locale::getLanguage("title");?></button>
+    </form>
+  </div>
 </body>
 </html>
