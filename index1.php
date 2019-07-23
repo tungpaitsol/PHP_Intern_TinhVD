@@ -115,7 +115,6 @@ class Bill{
 	private $_moneyFood;
 	private $_moneyEmployee;
 	private $_totalMoney;
-
 	public function __construct($billCode, $timeIn, $timeOut, $promotional,$moneyFood=0,$moneyEmployee=0, $totalMoney = 0){
 		$this->_billCode = $billCode;
 		$this->_timeIn = $timeIn;
@@ -312,16 +311,20 @@ class CaculatorBillEmployee{
 		$employeeTimes=$this->getCustomerHour($billCode);
 		$timeWorkEmployees=$this->getEmployeeHour($billCode);
 		$objBillEmployees=$this->_objBillEmployees;
-		$billE=0;	
+		$billE=0;
+		$i=0;	
 		foreach ($objBillEmployees as $objBillEmployee) {
-			$list="";
+			$list=$objBillEmployee->getList();
+			
 			if($objBillEmployee->getBillCode()==$billCode){
 				$moneyBillEmployeeCode=0;
 				foreach ($timeWorkEmployees[$billE]["hours"] as $hour) {
 					$quantityEmployee=$employeeTimes[$hour]['quantity_employee'];
 					$timeEat=$employeeTimes[$hour]['time'];
-					$list.=CaculatorBillEmployee::sevice[$quantityEmployee-1][$timeEat-1]."|";
+					$moneyE=CaculatorBillEmployee::sevice[$quantityEmployee-1][$timeEat-1];
 					$moneyBillEmployeeCode+=CaculatorBillEmployee::sevice[$quantityEmployee-1][$timeEat-1];
+					$list[$i]=["hour"=>$hour,"money_hour"=>$moneyE];
+					$i++;
 				}
 				$objBillEmployee->setList($list);
 				$objBillEmployee->setMoneySevice($moneyBillEmployeeCode);
@@ -341,7 +344,7 @@ class CaculatorBillEmployee{
 						$totalMoneyService+=$objBillEmployee->getMoneySevice();
 					}
 				}
-				return $objBill->setMoneyEmployee($totalMoneyService);
+				$objBill->setMoneyEmployee($totalMoneyService);
 			}	
 		}
 	}
@@ -350,6 +353,7 @@ class CaculatorBillEmployee{
 		foreach ($objBills as $objBill) {
 			$billCode=$objBill->getBillCode();
 			$this->setMoneyService($billCode);
+
 		}
 	}	
 }
@@ -438,11 +442,4 @@ class TotalBill{
 		}
 	}
 }
-// $billCode="B001";
-// $monneyEmployee=new CaculatorBillEmployee($objBillEmployees,$objBills);
-// $monneyEmployee->setMoneyService($billCode);
-// $moneyFood=new CaculatorBillFood($objFoods,$objBills,$objBillsFoods);
-// $moneyFood->setMoneyFoodBill($billCode);
-// $totalBill=new TotalBill($objBills);
-// $totalBill->TotalBill($billCode);
 ?>
