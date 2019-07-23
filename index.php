@@ -1,6 +1,6 @@
 <?php
 include("./index1.php");
-$billCode="B004";
+$billCode="B001";
 $monneyEmployee=new CaculatorBillEmployee($objBillEmployees,$objBills);
 $monneyEmployee->setMoneyService($billCode);
 $moneyFood=new CaculatorBillFood($objFoods,$objBills,$objBillsFoods);
@@ -16,7 +16,7 @@ class ExportBill{
 	private $_total;
 	private $_listFood;
 	private $_listEmployee;
-	function __construct($billcode,$date,$moneyFood,$moneyEmployee,$moneyPromotinal,$total,$listFood=[],$listEmployee=""){
+	function __construct($billcode,$date,$moneyFood,$moneyEmployee,$moneyPromotinal,$total,$listFood=[],$listEmployee=[]){
 		$this->_billCode=$billcode;
 		$this->_date=$date;
 		$this->_moneyFood=$moneyFood;
@@ -67,10 +67,12 @@ class CaculatorBill{
 	private $_objBillEmployees;
 	private $_exportBill;
 	private $_objBillFoods;
-	function __construct($objBillEmployees,$objBillFoods,$exportBill){
+	private $_listEmployeeBill;
+	function __construct($objBillEmployees,$objBillFoods,$exportBill,$listEmployeeBill=[]){
 		$this->_exportBill=$exportBill;
 		$this->_objBillEmployees=$objBillEmployees;
 		$this->_objBillFoods=$objBillFoods;
+		$this->_listEmployeeBill;
 	}
 	function getMoneyTime($billCode){
 		$this->_listMember=[];
@@ -78,11 +80,9 @@ class CaculatorBill{
 		$objBillEmployees=$this->_objBillEmployees;
 		foreach ($objBillEmployees as $objBillEmployee) {
 			if($objBillEmployee->getBillCode()==$billCode){
-				$timein=$objBillEmployee->getTimeIn();
-				$timeout=$objBillEmployee->getTimeOut();
 				$codeEmployee=$objBillEmployee->getEmployeeCode();
 				$list=$objBillEmployee->getList();
-				array_push($listMembers, array("employee_code"=>$codeEmployee,"timein"=>$timein,"timeout"=>$timeout,"listMoney"=>$list));
+				array_push($listMembers, array("employee_code"=>$codeEmployee,"listMoney"=>$list));
 			}
 		}
 		return $listMembers;
@@ -102,12 +102,26 @@ class CaculatorBill{
 		return $listFood;
 	}
 	function setExportBill($billCode){
+		$this->_listEmployeeBill=[];
+		$listEmployeeBill=$this->_listEmployeeBill;
 		$exportBills=$this->_exportBill;
 		foreach ($exportBills as $exportBill) {
 			if($exportBill->getBillCode()==$billCode){
-				$exportBill->setlistEmployee($this->getMoneyTime($billCode));
+				$employeesBill=$this->getMoneyTime($billCode);
+				$i=0;
+				foreach ($employeesBill as $stt => $employeeBill) {
+					$eCode=$employeeBill['employee_code'];
+					if(!in_array($eCode,array_keys($listEmployeeBill))){
+						$listEmployeeBill[$eCode]=$employeeBill['listMoney'];
+					}
+					else{
+						$listEmployeeBill[$eCode]+=$employeeBill['listMoney'];
+					}
+				}
 				$exportBill->setlistFood($this->getMenuFood($billCode));
+				$exportBill->setlistEmployee($listEmployeeBill);
 			}
+			
 		}
 	}
 	function getExportBill(){
@@ -155,78 +169,85 @@ $p->getExportBill();
 </head>
 <body>
 	<?php
-	foreach ($exportBill as $bill) {
-		if($bill->getBillCode()==$billCode){
-			$billCode=$bill->getBillCode();
-			$outdate=$bill->getDate();
-			echo "	<div class='container'>
-			<div class='form'>
-			<h1>Hóa đơn thanh toán</h1>
-			<div>Mã bill: $billCode</div>
-			<div>Ngày lập: $outdate</div>
-			<div class='food'>
-			Danh sách món ăn
-			<table>
-			<tr>
-			<th>Tên</th>
-			<th>Số lượng</th>
-			<th>Thành tiền</th>
-			</tr>
-			";
-			foreach ($bill->getListFood() as $food) {
-				$foodcode=$food['food_code'];
-				$quantity=$food['quantity'];
-				$moneys=$food['money'];
-				echo "<tr>
-				<td>$foodcode</td>
-				<td>$quantity</td>
-				<td>$moneys</td>
+	function getValue($arrayEmployee,$field){
+		$string="";
+		foreach ($arrayEmployee as $employee) {
+			$string.=$employee[$field]."|";
+		}
+		return $string;
+	}
+	function show($exportBill,$billCode){
+		foreach ($exportBill as $bill) {
+			if($bill->getBillCode()==$billCode){
+				$billCode=$bill->getBillCode();
+				$outdate=$bill->getDate();
+				echo "	<div class='container'>
+				<div class='form'>
+				<h1>Hóa đơn thanh toán</h1>
+				<div>Mã bill: $billCode</div>
+				<div>Ngày lập: $outdate</div>
+				<div class='food'>
+				Danh sách món ăn
+				<table>
+				<tr>
+				<th>Tên</th>
+				<th>Số lượng</th>
+				<th>Thành tiền</th>
+				</tr>
+				";
+				foreach ($bill->getListFood() as $food) {
+					$foodcode=$food['food_code'];
+					$quantity=$food['quantity'];
+					$moneys=$food['money'];
+					echo "<tr>
+					<td>$foodcode</td>
+					<td>$quantity</td>
+					<td>$moneys</td>
+					</tr>";
+				};
+				echo "</table>
+				</div>
+				<div class='em'>
+				Danh sách nhân viên
+				<table>
+				<tr>
+				<th>Mã nhân viên</th>
+				<th>Thời gian</th>
+				<th>Thành tiền</th>
 				</tr>";
-			};
-			echo "</table>
-			</div>
-			<div class='em'>
-			Danh sách nhân viên
-			<table>
-			<tr>
-			<th>Mã nhân viên</th>
-			<th>Thời gian vào</th>
-			<th>Thời gian ra</th>
-			<th>Thành tiền</th>
-			</tr>";
-			foreach ($bill->getlistEmployee() as $employee) {
-				$employeeCode=$employee['employee_code'];
-				$timeIn=$employee['timein'];
-				$timeOut=$employee['timeout'];
-				$money=$employee['listMoney'];
-				echo "<tr>
-				<td>$employeeCode</td>
-				<td>$timeIn</td>
-				<td>$timeOut</td>
-				<td>$money</td>
-				</tr>";
+				foreach ($bill->getlistEmployee() as $codeEmployee =>$employee) {	
+					$employeeCode=$codeEmployee;
+					$timeWork=getValue($employee,"hour");
+					$money=getValue($employee,"money_hour");
+					echo "<tr>
+					<td>$employeeCode</td>
+					<td>$timeWork</td>
+					<td>$money</td>
+					</tr>";
+				}
+				$moneyFood=$bill->getMoneyFood();
+				$moneyEmployee=$bill->getMoneyEmployee();
+				$moneyTotal=$bill->getTotal();
+				$moneyPromotinal=$bill->getPromotional();
+				$total=$moneyFood+$moneyEmployee;
+				$pay=$bill->getTotal();
+				echo "</table>
+				</div>
+				<div class='moneybill'>
+				<div>Tiền ăn: $moneyFood</div>
+				<div>Tiền Nhân viên: $moneyEmployee</div>
+				<div>Tổng tiền: $total</div>
+				<div>Thuế VAT 10%</div>
+				<div>Giảm giá: $moneyPromotinal</div>
+				<div>Thanh toán: $pay</div>
+				</div>
+				</div>
+				</div>";
+
 			}
-			$moneyFood=$bill->getMoneyFood();
-			$moneyEmployee=$bill->getMoneyEmployee();
-			$moneyTotal=$bill->getTotal();
-			$moneyPromotinal=$bill->getPromotional();
-			$total=$moneyFood+$moneyEmployee;
-			$pay=$bill->getTotal();
-			echo "</table>
-			</div>
-			<div class='moneybill'>
-			<div>Tiền ăn: $moneyFood</div>
-			<div>Tiền Nhân viên: $moneyEmployee</div>
-			<div>Tổng tiền: $total</div>
-			<div>Thuế VAT 10%</div>
-			<div>Giảm giá: $moneyPromotinal</div>
-			<div>Thanh toán: $pay</div>
-			</div>
-			</div>
-			</div>";
-			
 		}
 	}
+	show($exportBill,$billCode);
 	?>
 </body>
 </html>
